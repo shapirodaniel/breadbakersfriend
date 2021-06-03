@@ -789,12 +789,21 @@ body {
 	display: flex;
 }
 
-.toolbar {
+.toolbar-runner {
 	position: fixed;
 	bottom: 0;
+	left: 0;
 	width: 100%;
-	min-width: 320px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.toolbar {
+	width: 100%;
+	max-width: 580px;
 	height: 4em;
+	margin: 0 auto;
 	box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
 	background-color: var(--toolbar_background);
 	display: flex;

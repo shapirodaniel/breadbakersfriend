@@ -1,572 +1,1400 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="A free webapp that allows you to create, edit, save, and upload recipes with voice-to-text. Converts any weighted recipe to a dynamic baker's math table!">
-    <title>Bread Baker's Friend</title>
-    <link rel="stylesheet" href="bbf_main.css">
-    <script src="bbf_parse.js" defer></script>
-    <script src="bbf_events.js" defer></script>
-    <script src="bbf_table.js" defer></script>
-    <script defer>function delegator () {}</script>
-</head>
-<body class="body" onload="assignEventListeners();" onclick="delegator();">
-    <div class="main">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta
+			name="description"
+			content="A free webapp that allows you to create, edit, save, and upload recipes with voice-to-text. Converts any weighted recipe to a dynamic baker's math table!"
+		/>
+		<title>Bread Baker's Friend</title>
+		<link rel="stylesheet" href="bbf_main.css" />
+		<script src="bbf_parse.js" defer></script>
+		<script src="bbf_events.js" defer></script>
+		<script src="bbf_table.js" defer></script>
+		<script defer>
+			function delegator() {}
+		</script>
+	</head>
+	<body class="body" onload="assignEventListeners();" onclick="delegator();">
+		<div class="main">
+			<!-- hidden recipe load button -->
+			<input
+				class="hidden"
+				id="load-recipe-file-reader"
+				type="file"
+				onchange="readFile(event);"
+				onclick="delegator();"
+			/>
+			<!-- top-line faq, link, theme-switch -->
+			<div class="top-line" onclick="delegator();">
+				<span class="faq faq-link material-icons" onclick="delegator();"
+					>help_outline</span
+				>
+				<header><a href="#">bread baker's friend</a></header>
+				<span class="theme-switch material-icons" onclick="delegator();"
+					>brightness_4</span
+				>
+			</div>
+			<!-- ios-user-modal -->
+			<div class="modal" id="ios-user-modal" onclick="delegator();">
+				<div class="modal-topic-list" onclick="delegator();">
+					<span
+						class="modal-close-button material-icons"
+						id="ios-user-modal-close-button"
+						onclick="delegator();"
+						>close</span
+					>
+					<h2>File Saving For iOS</h2>
+					<div
+						class="topic-content"
+						id="ios-user-message"
+						onclick="delegator();"
+					>
+						<span class="topic-idea" onclick="delegator();">
+							<p>
+								<strong>Sébastian Page's</strong>
+								<a
+									href="https://www.idownloadblog.com/2016/04/14/how-to-download-files-and-documents-to-iphone-or-ipad/"
+								>
+									excellent guide to iOS's Files app</a
+								>
+								walks iOS users through saving and accessing files to iOS
+								devices.
+							</p>
+						</span>
+					</div>
+				</div>
+			</div>
+			<!-- faq/docs modal -->
+			<div class="modal" id="faq-modal" onclick="delegator();">
+				<div class="modal-topic-list" onclick="delegator();">
+					<span
+						class="modal-close-button material-icons"
+						id="faq-modal-close-button"
+						onclick="delegator();"
+						>close</span
+					>
+					<h2>FAQ / Help Docs</h2>
+					<h3>How do I...?</h3>
 
-        <!-- hidden recipe load button -->
-        <input class="hidden" id="load-recipe-file-reader" type="file" onchange=readFile(event); onclick="delegator();">
-        <!-- top-line faq, link, theme-switch -->
-        <div class="top-line" onclick="delegator();">
-            <span class="faq faq-link material-icons" onclick="delegator();">help_outline</span>
-            <header><a href="#">bread baker's friend</a></header>
-            <span class="theme-switch material-icons" onclick="delegator();">brightness_4</span>
-        </div>
-        <!-- ios-user-modal -->
-        <div class="modal" id="ios-user-modal" onclick="delegator();">
-            <div class="modal-topic-list" onclick="delegator();">
-                <span class="modal-close-button material-icons" id="ios-user-modal-close-button" onclick="delegator();">close</span>
-                <h2>File Saving For iOS</h2>
-                <div class="topic-content" id="ios-user-message" onclick="delegator();">
-                    <span class="topic-idea" onclick="delegator();">
-                        <p><strong>Sébastian Page's</strong> <a href="https://www.idownloadblog.com/2016/04/14/how-to-download-files-and-documents-to-iphone-or-ipad/">
-                                excellent guide to iOS's Files app</a> walks iOS users through saving and accessing files to iOS devices.</p>
-                    </span>
-                </div>
-            </div>
-        </div>
-        <!-- faq/docs modal -->
-        <div class="modal" id="faq-modal" onclick="delegator();">
-            <div class="modal-topic-list" onclick="delegator();">
-                <span class="modal-close-button material-icons" id="faq-modal-close-button" onclick="delegator();">close</span>
-                <h2>FAQ / Help Docs</h2>
-                <h3>How do I...?</h3>
+					<!-- how do i... -->
+					<span class="topic-button" onclick="delegator();">
+						<span class="topic-button-text" onclick="delegator();"
+							>Create a recipe</span
+						>
+						<span
+							class="topic-button-caret material-icons"
+							onclick="delegator();"
+							>keyboard_arrow_right</span
+						>
+					</span>
+					<div class="topic-content" onclick="delegator();">
+						<div class="vid-container" onclick="delegator();">
+							<video class="help-video" controls>
+								<source
+									src="/breadbakersfriend_videos/00_howTo_submit_recipe.webm"
+									type="video/webm"
+								/>
+							</video>
+						</div>
+						<div
+							class="example-container"
+							style="margin-top: 2em"
+							onclick="delegator();"
+						>
+							<p><strong>[ Number, unit, ingredient name... ]</strong></p>
+						</div>
+						<span class="topic-idea" onclick="delegator();">
+							<p>
+								Recipes begin with a number, followed by an optional unit, and
+								an ingredient name. Bread Baker's friend doesn't require commas
+								or other delimiting punctuation. Equal spacing is safest! Any
+								number that's not directly beside a unit will be treated as part
+								of an ingredient name.
+							</p>
+						</span>
+						<span class="topic-example" onclick="delegator();">
+							<span class="recipe-string" onclick="delegator();"
+								>"100g flour, 60g water, 20g whole milk (vitamin D added), 15g
+								egg yolk, 10g 0.25-inch pearl sugar..."</span
+							>
+						</span>
+						<span class="topic-idea" onclick="delegator();">
+							<p>
+								You may also choose to enter a recipe
+								<strong>without</strong> units, provided that units are left off
+								every ingredient. These <strong>uniform</strong> recipes can be
+								a predetermined set of baker's math or a group of ingredients
+								that would share the same unit.
+							</p>
+						</span>
+						<span class="topic-example" onclick="delegator();">
+							<span class="recipe-string" onclick="delegator();"
+								>"50 ap flour, 30 bread flour, 20 ww flour, 80 water, 2.5 salt,
+								.33 yeast..."</span
+							>
+						</span>
+						<span class="topic-idea" onclick="delegator();">
+							<p>
+								Bread baker's friend recognizes most metric and imperial units,
+								which can be mixed in the same recipe. It recognizes integers,
+								decimals, fractions, and mixed numbers.
+							</p>
+						</span>
+						<span class="topic-example" onclick="delegator();">
+							<span class="recipe-string" onclick="delegator();"
+								>"20 oz bread flour, 2 2/3 oz ww flour, 1.5# water, 6.5 oz milk,
+								1/2 lb sugar, 22g salt, 7g yeast..."</span
+							>
+						</span>
+						<div class="end-symbol"><br />* * *</div>
+					</div>
+					<span class="topic-button" onclick="delegator();">
+						<span class="topic-button-text" onclick="delegator();"
+							>Edit recipe name and method</span
+						>
+						<span
+							class="topic-button-caret material-icons"
+							onclick="delegator();"
+							>keyboard_arrow_right</span
+						>
+					</span>
+					<div class="topic-content" onclick="delegator();">
+						<div class="vid-container" onclick="delegator();">
+							<video class="help-video" controls>
+								<source
+									src="/breadbakersfriend_videos/01_howTo_recipe_method.webm"
+									type="video/webm"
+								/>
+							</video>
+						</div>
+						<span class="topic-idea" onclick="delegator();">
+							<p>
+								To edit a recipe name and/or method, highlight the placeholder
+								text in either field and overwrite.
+							</p>
+						</span>
+						<div class="end-symbol">* * *</div>
+					</div>
+					<span class="topic-button" onclick="delegator();">
+						<span class="topic-button-text" onclick="delegator();"
+							>Change total dough weight</span
+						>
+						<span
+							class="topic-button-caret material-icons"
+							onclick="delegator();"
+							>keyboard_arrow_right</span
+						>
+					</span>
+					<div class="topic-content" onclick="delegator();">
+						<div class="vid-container" onclick="delegator();">
+							<video class="help-video" controls>
+								<source
+									src="/breadbakersfriend_videos/02_howTo_tdw_change_manual.webm"
+									type="video/webm"
+								/>
+							</video>
+						</div>
+						<span class="topic-idea" onclick="delegator();">
+							<p>
+								Total dough weight can be edited manually if there are no items
+								rows present, otherwise editing is locked.
+							</p>
+						</span>
+						<div class="end-symbol">* * *</div>
+					</div>
+					<span class="topic-button" onclick="delegator();">
+						<span class="topic-button-text" onclick="delegator();"
+							>Edit a baker's percentage</span
+						>
+						<span
+							class="topic-button-caret material-icons"
+							onclick="delegator();"
+							>keyboard_arrow_right</span
+						>
+					</span>
+					<div class="topic-content" onclick="delegator();">
+						<div class="vid-container" onclick="delegator();">
+							<video class="help-video" controls>
+								<source
+									src="/breadbakersfriend_videos/03_howTo_bp_change_totalFlour.webm"
+									type="video/webm"
+								/>
+							</video>
+						</div>
+						<span class="topic-idea" onclick="delegator();">
+							<p>
+								Baker's percentages can be edited manually, or they can be
+								updated automatically by directly editing an individual
+								ingredient's scaled weight. Flour ingredients' baker's
+								percentages must always sum to 100. (Table edits are locked
+								while they do not.)
+							</p>
+						</span>
+						<div class="end-symbol">* * *</div>
+					</div>
 
-                <!-- how do i... -->
-                <span class="topic-button" onclick="delegator();">
-                    <span class="topic-button-text" onclick="delegator();">Create a recipe</span>
-                    <span class="topic-button-caret material-icons" onclick="delegator();">keyboard_arrow_right</span>
-                </span>
-                <div class="topic-content" onclick="delegator();">
-                    <div class="vid-container" onclick="delegator();">
-                        <video class="help-video" controls>
-                            <source src="/breadbakersfriend_videos/00_howTo_submit_recipe.webm" type="video/webm">
-                        </video>
-                    </div>
-                    <div class="example-container" style="margin-top: 2em;" onclick="delegator();">
-                        <p><strong>[ Number, unit, ingredient name... ]</strong></p>
-                    </div>
-                    <span class="topic-idea" onclick="delegator();">
-                        <p>Recipes begin with a number, followed by an optional unit, and an ingredient name. Bread Baker's friend doesn't require commas or other delimiting punctuation. Equal spacing is safest! Any number that's not directly beside a unit will be treated as part of an ingredient name.</p>
-                    </span>
-                    <span class="topic-example" onclick="delegator();">
-                        <span class="recipe-string" onclick="delegator();">"100g flour, 60g water, 20g whole milk (vitamin D added), 15g egg yolk, 10g 0.25-inch pearl sugar..."</span>
-                    </span>
-                    <span class="topic-idea" onclick="delegator();">
-                        <p>You may also choose to enter a recipe <strong>without</strong> units, provided that units are left off every ingredient. These <strong>uniform</strong> recipes can be a predetermined set of baker's math or a group of ingredients that would share the same unit.</p>
-                    </span>
-                    <span class="topic-example" onclick="delegator();">
-                        <span class="recipe-string" onclick="delegator();">"50 ap flour, 30 bread flour, 20 ww flour, 80 water, 2.5 salt, .33 yeast..."</span>
-                    </span>
-                    <span class="topic-idea" onclick="delegator();">
-                        <p>Bread baker's friend recognizes most metric and imperial units, which can be mixed in the same recipe. It recognizes integers, decimals, fractions, and mixed numbers.</p>
-                    </span>
-                    <span class="topic-example" onclick="delegator();">
-                        <span class="recipe-string" onclick="delegator();">"20 oz bread flour, 2 2/3 oz ww flour, 1.5# water, 6.5 oz milk, 1/2 lb sugar, 22g salt, 7g yeast..."</span>
-                    </span>
-                    <div class="end-symbol"><br>* * *</div>
-                </div>
-                <span class="topic-button" onclick="delegator();">
-                    <span class="topic-button-text" onclick="delegator();">Edit recipe name and method</span>
-                    <span class="topic-button-caret material-icons" onclick="delegator();">keyboard_arrow_right</span>
-                </span>
-                <div class="topic-content" onclick="delegator();">
-                    <div class="vid-container" onclick="delegator();">
-                        <video class="help-video" controls>
-                            <source src="/breadbakersfriend_videos/01_howTo_recipe_method.webm" type="video/webm">
-                        </video>
-                    </div>
-                    <span class="topic-idea" onclick="delegator();">
-                        <p>To edit a recipe name and/or method, highlight the placeholder text in either field and overwrite.</p>
-                    </span>
-                    <div class="end-symbol">* * *</div>
-                </div>
-                <span class="topic-button" onclick="delegator();">
-                    <span class="topic-button-text" onclick="delegator();">Change total dough weight</span>
-                    <span class="topic-button-caret material-icons" onclick="delegator();">keyboard_arrow_right</span>
-                </span>
-                <div class="topic-content" onclick="delegator();">
-                    <div class="vid-container" onclick="delegator();">
-                        <video class="help-video" controls>
-                            <source src="/breadbakersfriend_videos/02_howTo_tdw_change_manual.webm" type="video/webm">
-                        </video>
-                    </div>
-                    <span class="topic-idea" onclick="delegator();">
-                        <p>Total dough weight can be edited manually if there are no items rows present, otherwise editing is locked.</p>
-                    </span>
-                    <div class="end-symbol">* * *</div>
-                </div>
-                <span class="topic-button" onclick="delegator();">
-                    <span class="topic-button-text" onclick="delegator();">Edit a baker's percentage</span>
-                    <span class="topic-button-caret material-icons" onclick="delegator();">keyboard_arrow_right</span>
-                </span>
-                <div class="topic-content" onclick="delegator();">
-                    <div class="vid-container" onclick="delegator();">
-                        <video class="help-video" controls>
-                            <source src="/breadbakersfriend_videos/03_howTo_bp_change_totalFlour.webm" type="video/webm">
-                        </video>
-                    </div>
-                    <span class="topic-idea" onclick="delegator();">
-                        <p>Baker's percentages can be edited manually, or they can be updated automatically by directly editing an individual ingredient's scaled weight. Flour ingredients' baker's percentages must always sum to 100. (Table edits are locked while they do not.)
-                        </p>
-                    </span>
-                    <div class="end-symbol">* * *</div>
-                </div>
+					<span class="topic-button" onclick="delegator();">
+						<span class="topic-button-text" onclick="delegator();"
+							>Edit a scaled weight</span
+						>
+						<span
+							class="topic-button-caret material-icons"
+							onclick="delegator();"
+							>keyboard_arrow_right</span
+						>
+					</span>
+					<div class="topic-content" onclick="delegator();">
+						<div class="vid-container" onclick="delegator();">
+							<video class="help-video" controls>
+								<source
+									src="/breadbakersfriend_videos/04_howTo_sw_change_totalFlour.webm"
+									type="video/webm"
+								/>
+							</video>
+						</div>
+						<span class="topic-idea" onclick="delegator();">
+							<p>
+								Bread Baker's Friend allows you to edit scaled weights directly
+								if there are no items present! Adding to or subtracting from any
+								individual ingredient's scaled weight prompts a recalculation of
+								baker's percentages, using the new ratios of ingredient weights.
+							</p>
+						</span>
+						<div class="end-symbol">* * *</div>
+					</div>
+					<span class="topic-button" onclick="delegator();">
+						<span class="topic-button-text" onclick="delegator();"
+							>Add and remove items</span
+						>
+						<span
+							class="topic-button-caret material-icons"
+							onclick="delegator();"
+							>keyboard_arrow_right</span
+						>
+					</span>
+					<div class="topic-content" onclick="delegator();">
+						<div class="vid-container" onclick="delegator();">
+							<video class="help-video" controls>
+								<source
+									src="/breadbakersfriend_videos/05_howTo_addremove_items.webm"
+									type="video/webm"
+								/>
+							</video>
+						</div>
+						<span class="topic-idea" onclick="delegator();">
+							<p>
+								To add or remove items, click the "Add Item (+)" button located
+								in the center of the bottom toolbar.
+							</p>
+						</span>
+						<div class="end-symbol">* * *</div>
+					</div>
+					<span class="topic-button" onclick="delegator();">
+						<span class="topic-button-text" onclick="delegator();"
+							>Add and remove subrecipes</span
+						>
+						<span
+							class="topic-button-caret material-icons"
+							onclick="delegator();"
+							>keyboard_arrow_right</span
+						>
+					</span>
+					<div class="topic-content" onclick="delegator();">
+						<div class="vid-container" onclick="delegator();">
+							<video class="help-video" controls>
+								<source
+									src="/breadbakersfriend_videos/06_howTo_addremove_subrecipe.webm"
+									type="video/webm"
+								/>
+							</video>
+						</div>
+						<span class="topic-idea" onclick="delegator();">
+							<p>
+								Subrecipes may be added for any main table individual ingredient
+								<strong>except the total main ingredient</strong>. To add a
+								subrecipe, click the ingredient name, enter a subrecipe, and
+								click the "Do The Math" button located directly below the
+								subrecipe text field. (Note: if the main table "Do The Math"
+								button is clicked, the current table will be replaced.)
+							</p>
+						</span>
+						<div class="end-symbol">* * *</div>
+					</div>
+					<span class="topic-button" onclick="delegator();">
+						<span class="topic-button-text" onclick="delegator();"
+							>Save file for reload or spreadsheet, csv import</span
+						>
+						<span
+							class="topic-button-caret material-icons"
+							onclick="delegator();"
+							>keyboard_arrow_right</span
+						>
+					</span>
+					<div class="topic-content" onclick="delegator();">
+						<div class="vid-container" onclick="delegator();">
+							<video class="help-video" controls>
+								<source
+									src="/breadbakersfriend_videos/07_howTo_save.webm"
+									type="video/webm"
+								/>
+							</video>
+						</div>
+						<span class="topic-idea" onclick="delegator();">
+							<p>
+								Bread Baker's Friend allows you to generate the following recipe
+								files:
+							</p>
+						</span>
+						<span class="topic example" onclick="delegator();">
+							<div class="example-container" onclick="delegator();">
+								"bbf_myRecipe_json.txt"<br />= bbf-loadable file<br /><br />"bbf_myRecipe_csv.txt"<br />=
+								plain CSV (wysiwyg, from table)<br /><br />"bbf_myRecipe_spreadsheet.txt"<br />=
+								CSV with spreadsheet formulas
+							</div>
+						</span>
+						<span class="topic-idea"
+							><p>
+								These files can be renamed however you like, provided that the
+								.txt suffix is retained!
+							</p>
+						</span>
+						<div class="end-symbol">* * *</div>
+					</div>
+					<span class="topic-button" onclick="delegator();">
+						<span class="topic-button-text" onclick="delegator();"
+							>How to import spreadsheet/plain csv to your preferred spreadsheet
+							editor</span
+						>
+						<span
+							class="topic-button-caret material-icons"
+							onclick="delegator();"
+							>keyboard_arrow_right</span
+						>
+					</span>
+					<div class="topic-content" onclick="delegator();">
+						<div class="vid-container" onclick="delegator();">
+							<video class="help-video" controls>
+								<source
+									src="/breadbakersfriend_videos/08_howTo_spreadsheet_import.webm"
+									type="video/webm"
+								/>
+							</video>
+						</div>
+						<span class="topic-idea" onclick="delegator();">
+							<p>
+								To import a Bread Baker's Friend spreadsheet or plain CSV (note
+								that "spreadsheet" files are CSVs with formulas in the place of
+								certain numeric values), use the import function of your
+								preferred spreadsheet program.
+							</p>
+							<p>
+								Note that 1) it may be necessary to specify "Comma-separated
+								value" import for both spreadsheets and plain CSVs, and 2) it
+								may be necessary to select an option that allows functions to be
+								interpreted as functions. (See the above video for a
+								demonstration in Google Sheets.)
+							</p>
+							<p>
+								Spreadsheet files are CSVs with formulas in the place of certain
+								fields' numeric values, allowing the spreadsheet to function
+								similarly to Bread Baker's Friend. Most of Bread Baker's
+								Friend's functionality is preserved; notable exceptions include
+								item weights (which are converted to grams in spreadsheets),
+								total dough weight (tied directly to item weights), and direct
+								editing of scaled weights (not preserved). Otherwise, after
+								importing to your preferred spreadsheet program, spreadsheet
+								files will dynamically update most values: subrecipes are linked
+								to the main table recipe and edits to baker's percentages behave
+								as expected.
+							</p>
+						</span>
+						<div class="end-symbol">* * *</div>
+					</div>
+					<!-- faq... -->
+					<h3>Other frequently asked questions:</h3>
+					<span class="topic-button" onclick="delegator();">
+						<span class="topic-button-text" onclick="delegator();"
+							>Why are some table values a different color than others?</span
+						>
+						<span
+							class="topic-button-caret material-icons"
+							onclick="delegator();"
+							>keyboard_arrow_right</span
+						>
+					</span>
+					<div class="topic-content" onclick="delegator();">
+						<span class="topic-idea" onclick="delegator();">
+							<p>
+								Bread Baker's Friend indicates whether a cell value can be
+								changed or not by highlighting editable values
+								<span style="color: var(--editable)">this color</span>.
+							</p>
+						</span>
+						<div class="end-symbol">* * *</div>
+					</div>
+					<span class="topic-button" onclick="delegator();">
+						<span class="topic-button-text" onclick="delegator();"
+							>Why is the table locked?</span
+						>
+						<span
+							class="topic-button-caret material-icons"
+							onclick="delegator();"
+							>keyboard_arrow_right</span
+						>
+					</span>
+					<div class="topic-content" onclick="delegator();">
+						<span class="topic-idea" onclick="delegator();">
+							<p>
+								Bread Baker's Friend locks editing if a value would lead to
+								Not-a-Number (NaN) values on recalculation.
+								<strong>One notable exception:</strong> item weight cells will
+								accept most units in addition to the numeric value, for example,
+								"100 g" or "3.5 oz".
+							</p>
+							<p>
+								The cell value that prompted the error will be highlighted
+								<span style="color: var(--tablewarning)">this color.</span>
+								Editing is restored when the value is resolved.
+							</p>
+							<p>
+								<strong>A note about flour weights: </strong>if a flour
+								ingredient's baker's percentage is changed, it will cause
+								<span style="color: var(--tablewarning)"
+									>all flour ingredients's bakers percentages</span
+								>
+								to be highlighted, as well as the
+								<span
+									style="
+										color: var(--buttontext_emphasis);
+										background-color: var(--tablewarning);
+									"
+									>total flour weight's</span
+								>. Adjust any flour-weight value to bring the sum back to 100
+								and editing will be restored!
+							</p>
+							<p>
+								Total dough weight and individual scaled ingredient weights are
+								locked if there are items present in the table. Baker's
+								percentages will (in the absence of an error) always be
+								editable.
+							</p>
+							<p>
+								Total formula percentage is always locked; it is calculated from
+								individual baker's percentages. Subrecipe names are also locked,
+								as these are tied to main table names.
+							</p>
+						</span>
+						<div class="end-symbol">* * *</div>
+					</div>
+					<span class="topic-button" onclick="delegator();">
+						<span class="topic-button-text" onclick="delegator();"
+							>Why can't ingredient names be changed, and why can't I add or
+							remove main ingredient rows?</span
+						>
+						<span
+							class="topic-button-caret material-icons"
+							onclick="delegator();"
+							>keyboard_arrow_right</span
+						>
+					</span>
+					<div class="topic-content" onclick="delegator();">
+						<span class="topic-idea" onclick="delegator();">
+							<p>
+								Main table ingredients cannot be added or removed by design, nor
+								can their names be changed once a main table has been generated.
+								The best way to edit a recipe that's already been generated is
+								to resubmit it through the main "Enter your recipe" field. All
+								of your baker's percentage changes will be reflected there, so
+								if you've already begun editing your table, it's easy to add or
+								remove an ingredient!
+							</p>
+							<p>
+								(Note that subrecipes are not held over when a new table is
+								generated.)
+							</p>
+						</span>
+						<div class="end-symbol">* * *</div>
+					</div>
+					<span class="topic-button" onclick="delegator();">
+						<span class="topic-button-text" onclick="delegator();"
+							>Why did the value I just entered change?</span
+						>
+						<span
+							class="topic-button-caret material-icons"
+							onclick="delegator();"
+							>keyboard_arrow_right</span
+						>
+					</span>
+					<div class="topic-content" onclick="delegator();">
+						<span class="topic-idea" onclick="delegator();">
+							<p>
+								Bread Baker's Friend recalculates all table values whenever an
+								individual cell is changed. Rounding will occasionally produce a
+								value that differs slightly from the one entered, usually by no
+								more than a gram.
+							</p>
+						</span>
+						<div class="end-symbol">* * *</div>
+					</div>
+				</div>
+			</div>
+			<!-- quickstart modal goes here -->
+			<div class="modal" id="quickstart-modal" onclick="delegator();">
+				<div class="modal-topic-list" onclick="delegator();">
+					<span
+						class="modal-close-button material-icons"
+						id="quickstart-modal-close-button"
+						onclick="delegator();"
+						>close</span
+					>
+					<h2>Getting Started:</h2>
 
-                <span class="topic-button" onclick="delegator();">
-                    <span class="topic-button-text" onclick="delegator();">Edit a scaled weight</span>
-                    <span class="topic-button-caret material-icons" onclick="delegator();">keyboard_arrow_right</span>
-                </span>
-                <div class="topic-content" onclick="delegator();">
-                    <div class="vid-container" onclick="delegator();">
-                        <video class="help-video" controls>
-                            <source src="/breadbakersfriend_videos/04_howTo_sw_change_totalFlour.webm" type="video/webm">
-                        </video>
-                    </div>
-                    <span class="topic-idea" onclick="delegator();">
-                        <p>Bread Baker's Friend allows you to edit scaled weights directly if there are no items present! Adding to or subtracting from any individual ingredient's scaled weight prompts a recalculation of baker's percentages, using the new ratios of ingredient weights.</p>
-                    </span>
-                    <div class="end-symbol">* * *</div>
-                </div>
-                <span class="topic-button" onclick="delegator();">
-                    <span class="topic-button-text" onclick="delegator();">Add and remove items</span>
-                    <span class="topic-button-caret material-icons" onclick="delegator();">keyboard_arrow_right</span>
-                </span>
-                <div class="topic-content" onclick="delegator();">
-                    <div class="vid-container" onclick="delegator();">
-                        <video class="help-video" controls>
-                            <source src="/breadbakersfriend_videos/05_howTo_addremove_items.webm" type="video/webm">
-                        </video>
-                    </div>
-                    <span class="topic-idea" onclick="delegator();">
-                        <p>To add or remove items, click the "Add Item (+)" button located in the center of the bottom toolbar.</p>
-                    </span>
-                    <div class="end-symbol">* * *</div>
-                </div>
-                <span class="topic-button" onclick="delegator();">
-                    <span class="topic-button-text" onclick="delegator();">Add and remove subrecipes</span>
-                    <span class="topic-button-caret material-icons" onclick="delegator();">keyboard_arrow_right</span>
-                </span>
-                <div class="topic-content" onclick="delegator();">
-                    <div class="vid-container" onclick="delegator();">
-                        <video class="help-video" controls>
-                            <source src="/breadbakersfriend_videos/06_howTo_addremove_subrecipe.webm" type="video/webm">
-                        </video>
-                    </div>
-                    <span class="topic-idea" onclick="delegator();">
-                        <p>Subrecipes may be added for any main table individual ingredient <strong>except the total main ingredient</strong>. To add a subrecipe, click the ingredient name, enter a subrecipe, and click the "Do The Math" button located directly below the subrecipe text field. (Note: if the main table "Do The Math" button is clicked, the current table will be replaced.)</p>
-                    </span>
-                    <div class="end-symbol">* * *</div>
-                </div>
-                <span class="topic-button" onclick="delegator();">
-                    <span class="topic-button-text" onclick="delegator();">Save file for reload or spreadsheet, csv import</span>
-                    <span class="topic-button-caret material-icons" onclick="delegator();">keyboard_arrow_right</span>
-                </span>
-                <div class="topic-content" onclick="delegator();">
-                    <div class="vid-container" onclick="delegator();">
-                        <video class="help-video" controls>
-                            <source src="/breadbakersfriend_videos/07_howTo_save.webm" type="video/webm">
-                        </video>
-                    </div>
-                    <span class="topic-idea" onclick="delegator();">
-                        <p>Bread Baker's Friend allows you to generate the following recipe files:</p>
-                    </span>
-                    <span class="topic example" onclick="delegator();">
-                        <div class="example-container" onclick="delegator();">"bbf_myRecipe_json.txt"<br>= bbf-loadable file<br><br>"bbf_myRecipe_csv.txt"<br>= plain CSV (wysiwyg, from table)<br><br>"bbf_myRecipe_spreadsheet.txt"<br>= CSV with spreadsheet formulas</div>
-                    </span>
-                     <span class="topic-idea"><p>These files can be renamed however you like, provided that the .txt suffix is retained!</p>
-                    </span>
-                    <div class="end-symbol">* * *</div>
-                </div>
-                <span class="topic-button" onclick="delegator();">
-                    <span class="topic-button-text" onclick="delegator();">How to import spreadsheet/plain csv to your preferred spreadsheet editor</span>
-                    <span class="topic-button-caret material-icons" onclick="delegator();">keyboard_arrow_right</span>
-                </span>
-                <div class="topic-content" onclick="delegator();">
-                    <div class="vid-container" onclick="delegator();">
-                        <video class="help-video" controls>
-                            <source src="/breadbakersfriend_videos/08_howTo_spreadsheet_import.webm" type="video/webm">
-                        </video>
-                    </div>
-                    <span class="topic-idea" onclick="delegator();">
-                        <p>To import a Bread Baker's Friend spreadsheet or plain CSV (note that "spreadsheet" files are CSVs with formulas in the place of certain numeric values), use the import function of your preferred spreadsheet program.</p><p> Note that 1) it may be necessary to specify "Comma-separated value" import for both spreadsheets and plain CSVs, and 2) it may be necessary to select an option that allows functions to be interpreted as functions. (See the above video for a demonstration in Google Sheets.) </p><p>Spreadsheet files are CSVs with formulas in the place of certain fields' numeric values, allowing the spreadsheet to function similarly to Bread Baker's Friend. Most of Bread Baker's Friend's functionality is preserved; notable exceptions include item weights (which are converted to grams in spreadsheets), total dough weight (tied directly to item weights), and direct editing of scaled weights (not preserved). Otherwise, after importing to your preferred spreadsheet program, spreadsheet files will dynamically update most values: subrecipes are linked to the main table recipe and edits to baker's percentages behave as expected.</p>
-                    </span>
-                    <div class="end-symbol">* * *</div>
-                </div>
-                <!-- faq... -->
-                <h3>Other frequently asked questions:</h3>
-                <span class="topic-button" onclick="delegator();">
-                    <span class="topic-button-text" onclick="delegator();">Why are some table values a different color than others?</span>
-                    <span class="topic-button-caret material-icons" onclick="delegator();">keyboard_arrow_right</span>
-                </span>
-                <div class="topic-content" onclick="delegator();">
-                    <span class="topic-idea" onclick="delegator();">
-                        <p>Bread Baker's Friend indicates whether a cell value can be changed or not by highlighting editable values <span style="color: var(--editable);">this color</span>.</p>
-                    </span>
-                    <div class="end-symbol">* * *</div>
-                </div>
-                <span class="topic-button" onclick="delegator();">
-                    <span class="topic-button-text" onclick="delegator();">Why is the table locked?</span>
-                    <span class="topic-button-caret material-icons" onclick="delegator();">keyboard_arrow_right</span>
-                </span>
-                <div class="topic-content" onclick="delegator();">
-                    <span class="topic-idea" onclick="delegator();">
-                        <p>Bread Baker's Friend locks editing if a value would lead to Not-a-Number (NaN) values on recalculation. <strong>One notable exception:</strong> item weight cells will accept most units in addition to the numeric value, for example, "100 g" or "3.5 oz".</p><p>The cell value that prompted the error will be highlighted <span style="color: var(--tablewarning);">this color.</span> Editing is restored when the value is resolved.</p><p><strong>A note about flour weights: </strong>if a flour ingredient's baker's percentage is changed, it will cause <span style="color: var(--tablewarning);">all flour ingredients's bakers percentages</span> to be highlighted, as well as the <span style="color: var(--buttontext_emphasis); background-color: var(--tablewarning);">total flour weight's</span>. Adjust any flour-weight value to bring the sum back to 100 and editing will be restored!</p><p> Total dough weight and individual scaled ingredient weights are locked if there are items present in the table. Baker's percentages will (in the absence of an error) always be editable.</p><p> Total formula percentage is always locked; it is calculated from individual baker's percentages. Subrecipe names are also locked, as these are tied to main table names.</p>
-                    </span>
-                    <div class="end-symbol">* * *</div>
-                </div>
-                <span class="topic-button" onclick="delegator();">
-                    <span class="topic-button-text" onclick="delegator();">Why can't ingredient names be changed, and why can't I add or remove main ingredient rows?</span>
-                    <span class="topic-button-caret material-icons" onclick="delegator();">keyboard_arrow_right</span>
-                </span>
-                <div class="topic-content" onclick="delegator();">
-                    <span class="topic-idea" onclick="delegator();">
-                        <p>Main table ingredients cannot be added or removed by design, nor can their names be changed once a main table has been generated. The best way to edit a recipe that's already been generated is to resubmit it through the main "Enter your recipe" field. All of your baker's percentage changes will be reflected there, so if you've already begun editing your table, it's easy to add or remove an ingredient!</p><p> (Note that subrecipes are not held over when a new table is generated.) </p>
-                    </span>
-                    <div class="end-symbol">* * *</div>
-                </div>
-                <span class="topic-button" onclick="delegator();">
-                    <span class="topic-button-text" onclick="delegator();">Why did the value I just entered change?</span>
-                    <span class="topic-button-caret material-icons" onclick="delegator();">keyboard_arrow_right</span>
-                </span>
-                <div class="topic-content" onclick="delegator();">
-                    <span class="topic-idea" onclick="delegator();">
-                        <p>Bread Baker's Friend recalculates all table values whenever an individual cell is changed. Rounding will occasionally produce a value that differs slightly from the one entered, usually by no more than a gram.</p>
-                    </span>
-                    <div class="end-symbol">* * *</div>
-                </div>
-            </div>
-        </div>
-        <!-- quickstart modal goes here -->
-        <div class="modal" id="quickstart-modal" onclick="delegator();">
-            <div class="modal-topic-list" onclick="delegator();">
-                <span class="modal-close-button material-icons" id="quickstart-modal-close-button" onclick="delegator();">close</span>
-                <h2>Getting Started:</h2>
+					<!-- quickstart video synopsis here -->
+					<span class="topic-button" onclick="delegator();">
+						<span class="topic-button-text" onclick="delegator();"
+							>A brief introductory video of Bread Baker's Friend in
+							action</span
+						>
+						<span
+							class="topic-button-caret material-icons"
+							onclick="delegator();"
+							>keyboard_arrow_right</span
+						>
+					</span>
+					<div class="topic-content" onclick="delegator();">
+						<div class="vid-container" onclick="delegator();">
+							<video class="help-video" controls>
+								<source
+									src="/breadbakersfriend_videos/quickstart-overview.webm"
+									type="video/webm"
+								/>
+							</video>
+						</div>
+						<div class="end-symbol"><br />* * *</div>
+					</div>
+					<span class="topic-button" onclick="delegator();">
+						<span class="topic-button-text" onclick="delegator();"
+							>New to baker's math? Here's an overview!</span
+						>
+						<span
+							class="topic-button-caret material-icons"
+							onclick="delegator();"
+							>keyboard_arrow_right</span
+						>
+					</span>
+					<div class="topic-content" onclick="delegator();">
+						<span class="topic-idea" onclick="delegator();">
+							<p>
+								<strong>Baker's math</strong> relates ingredients to a main
+								weight. Usually, this main weight is a combination of flour
+								weights, but it can be an arbitrary main ingredient, too.
+							</p>
+						</span>
+						<span class="topic-example" onclick="delegator();">
+							<div class="topic_ingredient-line" onclick="delegator();">
+								<span onclick="delegator();">100</span><span>g</span
+								><span>ap flour</span>
+							</div>
+							<div class="topic_ingredient-line" onclick="delegator();">
+								<span onclick="delegator();">50</span><span>g</span
+								><span>bread flour</span>
+							</div>
+							<div class="topic_ingredient-line" onclick="delegator();">
+								<span onclick="delegator();">30</span><span>g</span
+								><span>spelt flour</span>
+							</div>
+							<div class="topic_ingredient-line" onclick="delegator();">
+								<span onclick="delegator();">20</span><span>g</span
+								><span>rye flour</span>
+							</div>
+							<div class="topic_ingredient-line" onclick="delegator();">
+								<span onclick="delegator();">150</span><span>g</span
+								><span>water</span>
+							</div>
+							<div class="topic_ingredient-line" onclick="delegator();">
+								<span onclick="delegator();">30</span><span>g</span
+								><span>levain</span>
+							</div>
+							<div class="topic_ingredient-line" onclick="delegator();">
+								<span onclick="delegator();">5</span><span>g</span
+								><span>salt</span>
+							</div>
+							<p>
+								<strong>Total main weight,</strong> in this case the sum of all
+								"flour" ingredients, is 200g. Each ingredient is divided by this
+								amount to yield a baker's percentage for that ingredient.
+							</p>
+							<div class="example-container" onclick="delegator();">
+								100g ap flour ÷ 200g total flour = <br />50% ap flour
+							</div>
+						</span>
+						<span class="topic-idea" onclick="delegator();">
+							<p>
+								Our example recipe yields the following baker's percentages:
+							</p>
+						</span>
+						<span class="topic-example" onclick="delegator();">
+							<div
+								class="topic_ingredient-line total-main-ingredient"
+								onclick="delegator();"
+							>
+								<span onclick="delegator();">100</span><span>%</span
+								><span>total flour</span>
+							</div>
+							<div class="topic_ingredient-line" onclick="delegator();">
+								<span onclick="delegator();">50</span><span>%</span
+								><span>ap flour</span>
+							</div>
+							<div class="topic_ingredient-line" onclick="delegator();">
+								<span onclick="delegator();">25</span><span>%</span
+								><span>bread flour</span>
+							</div>
+							<div class="topic_ingredient-line" onclick="delegator();">
+								<span onclick="delegator();">15</span><span>%</span
+								><span>spelt flour</span>
+							</div>
+							<div class="topic_ingredient-line" onclick="delegator();">
+								<span onclick="delegator();">10</span><span>%</span
+								><span>rye flour</span>
+							</div>
+							<div class="topic_ingredient-line" onclick="delegator();">
+								<span onclick="delegator();">75</span><span>%</span
+								><span>water</span>
+							</div>
+							<div class="topic_ingredient-line" onclick="delegator();">
+								<span onclick="delegator();">15</span><span>%</span
+								><span>levain</span>
+							</div>
+							<div class="topic_ingredient-line" onclick="delegator();">
+								<span onclick="delegator();">2.5</span><span>%</span
+								><span>salt</span>
+							</div>
+						</span>
+						<span class="topic-idea" onclick="delegator();">
+							<p>
+								These individual baker's percentages can then be used to scale
+								any total dough weight for each individual ingredient,
+								guaranteeing consistency of the recipe -- no matter the
+								quantity.
+							</p>
+						</span>
+						<span class="topic example" onclick="delegator();">
+							<div class="example-container" onclick="delegator();">
+								Scaled Weight Formula:<br />Individual Baker's Percentage<br />
+								÷ Total Formula<br />
+								* Total Dough Weight =<br />Individual Scaled Weight
+							</div>
+						</span>
+						<span class="topic-idea" onclick="delegator();">
+							<p>
+								The <strong>total formula</strong> is the sum of all ingredient
+								baker's percentages. If the
+								<strong>total main weight</strong> is a sum of main ingredients,
+								it is omitted; otherwise, it's counted!
+							</p>
+						</span>
+						<span class="topic example" onclick="delegator();">
+							<div class="example-container" onclick="delegator();">
+								50 + 25 + 15 + 10 + 75 + 15 + 2.5 =<br />192.5%
+							</div>
+						</span>
+						<span class="topic-idea" onclick="delegator();">
+							<p>
+								Let's scale our example recipe using a
+								<strong>total dough weight</strong> equal to a 680g tin loaf
+								(approximately 1.5 lbs), and the previously calculated
+								<strong>total formula,</strong> 192.5%:
+							</p>
+						</span>
+						<span class="topic-example" onclick="delegator();">
+							<div class="topic_ingredient-line header" onclick="delegator();">
+								<span onclick="delegator();">ingredient</span><span>bp (%)</span
+								><span>weight (g)</span>
+							</div>
+							<div
+								class="topic_ingredient-line total-main-ingredient"
+								onclick="delegator();"
+							>
+								<span onclick="delegator();">total flour</span><span>100</span
+								><span>353</span>
+							</div>
+							<div class="topic_ingredient-line" onclick="delegator();">
+								<span onclick="delegator();">ap flour</span><span>50</span
+								><span>176.6</span>
+							</div>
+							<div class="topic_ingredient-line" onclick="delegator();">
+								<span onclick="delegator();">bread flour</span><span>25</span
+								><span>88.3</span>
+							</div>
+							<div class="topic_ingredient-line" onclick="delegator();">
+								<span onclick="delegator();">spelt flour</span><span>15</span
+								><span>53</span>
+							</div>
+							<div class="topic_ingredient-line" onclick="delegator();">
+								<span onclick="delegator();">rye flour</span><span>10</span
+								><span>35.3</span>
+							</div>
+							<div class="topic_ingredient-line" onclick="delegator();">
+								<span onclick="delegator();">water</span><span>75</span
+								><span>265</span>
+							</div>
+							<div class="topic_ingredient-line" onclick="delegator();">
+								<span onclick="delegator();">levain</span><span>15</span
+								><span>53</span>
+							</div>
+							<div class="topic_ingredient-line" onclick="delegator();">
+								<span onclick="delegator();">salt</span><span>2.5</span
+								><span>8.8</span>
+							</div>
+						</span>
+						<div class="end-symbol"><br />* * *</div>
+					</div>
+					<span class="topic-button" onclick="delegator();">
+						<span class="topic-button-text" onclick="delegator();"
+							>How does Bread Baker's Friend determine which ingredient(s) are
+							used to calculate the total main weight?</span
+						>
+						<span
+							class="topic-button-caret material-icons"
+							onclick="delegator();"
+							>keyboard_arrow_right</span
+						>
+					</span>
+					<div class="topic-content" onclick="delegator();">
+						<span class="topic-idea" onclick="delegator();">
+							<p>
+								Bread Baker's Friend sums all flour ingredients automatically.
+								Alternatively, you can designate a main ingredient with an
+								asterisk.
+							</p>
+							<p>Given the following recipe,</p>
+						</span>
+						<span class="topic-example" onclick="delegator();">
+							<div class="topic_ingredient-line" onclick="delegator();">
+								<span onclick="delegator();">300</span><span>g</span
+								><span>*9-grain<br />seed mix</span>
+							</div>
+							<div class="topic_ingredient-line" onclick="delegator();">
+								<span onclick="delegator();">420</span><span>g</span
+								><span>water</span>
+							</div>
+							<div class="topic_ingredient-line" onclick="delegator();">
+								<span onclick="delegator();">90</span><span>g</span
+								><span>ww flour</span>
+							</div>
+							<div class="topic_ingredient-line" onclick="delegator();">
+								<span onclick="delegator();">30</span><span>g</span
+								><span>rye flour</span>
+							</div>
+						</span>
+						<span class="topic-idea" onclick="delegator();">
+							<p>
+								<strong>*9-grain seed mix</strong> will be set to 100%, yielding
+								the following baker's percentages:
+							</p>
+						</span>
+						<span class="topic-example" onclick="delegator();">
+							<div class="topic_ingredient-line" onclick="delegator();">
+								<span onclick="delegator();">100</span><span>%</span
+								><span>*9-grain<br />seed mix</span>
+							</div>
+							<div class="topic_ingredient-line" onclick="delegator();">
+								<span onclick="delegator();">140</span><span>%</span
+								><span>water</span>
+							</div>
+							<div class="topic_ingredient-line" onclick="delegator();">
+								<span onclick="delegator();">30</span><span>%</span
+								><span>ww flour</span>
+							</div>
+							<div class="topic_ingredient-line" onclick="delegator();">
+								<span onclick="delegator();">10</span><span>%</span
+								><span>rye flour</span>
+							</div>
+						</span>
+						<span class="topic-idea" onclick="delegator();">
+							<p>
+								Without the asterisk, ww + rye flours will be set to 100%,
+								yielding different, sillier baker's percentages.
+							</p>
+						</span>
+						<span class="topic-example" onclick="delegator();">
+							<div
+								class="topic_ingredient-line total-main-ingredient"
+								onclick="delegator();"
+							>
+								<span onclick="delegator();">100</span><span>%</span
+								><span>total flour</span>
+							</div>
+							<div class="topic_ingredient-line" onclick="delegator();">
+								<span onclick="delegator();">250</span><span>%</span
+								><span>9-grain<br />seed mix</span>
+							</div>
+							<div class="topic_ingredient-line" onclick="delegator();">
+								<span onclick="delegator();">350</span><span>%</span
+								><span>water</span>
+							</div>
+							<div class="topic_ingredient-line" onclick="delegator();">
+								<span onclick="delegator();">75</span><span>%</span
+								><span>ww flour</span>
+							</div>
+							<div class="topic_ingredient-line" onclick="delegator();">
+								<span onclick="delegator();">25</span><span>%</span
+								><span>rye flour</span>
+							</div>
+						</span>
+						<span class="topic-idea" onclick="delegator();">
+							<p>
+								Asterisks take precedence over flour ingredients in determining
+								which ingredient(s) make up the
+								<strong>total main ingredient</strong>.
+							</p>
+						</span>
+						<div class="end-symbol">* * *</div>
+					</div>
+					<span class="topic-button" onclick="delegator();">
+						<span class="topic-button-text" onclick="delegator();"
+							>How do I format my recipe?</span
+						>
+						<span
+							class="topic-button-caret material-icons"
+							onclick="delegator();"
+							>keyboard_arrow_right</span
+						>
+					</span>
+					<div class="topic-content" onclick="delegator();">
+						<div
+							class="example-container"
+							style="margin-top: 2em"
+							onclick="delegator();"
+						>
+							<p><strong>[ Number, unit, ingredient name... ]</strong></p>
+						</div>
+						<span class="topic-idea" onclick="delegator();">
+							<p>
+								Recipes begin with a number, followed by an optional unit, and
+								an ingredient name. Bread Baker's friend doesn't require commas
+								or other delimiting punctuation. Equal spacing is safest! Any
+								number that's not directly beside a unit will be treated as part
+								of an ingredient name.
+							</p>
+						</span>
+						<span class="topic-example" onclick="delegator();">
+							<span class="recipe-string" onclick="delegator();"
+								>"100g flour, 60g water, 20g whole milk (vitamin D added), 15g
+								egg yolk, 10g 0.25-inch pearl sugar..."</span
+							>
+						</span>
+						<span class="topic-idea" onclick="delegator();">
+							<p>
+								You may also choose to enter a recipe
+								<strong>without</strong> units, provided that units are left off
+								every ingredient. These <strong>uniform</strong> recipes can be
+								a predetermined set of baker's math or a group of ingredients
+								that would share the same unit.
+							</p>
+						</span>
+						<span class="topic-example" onclick="delegator();">
+							<span class="recipe-string" onclick="delegator();"
+								>"50 ap flour, 30 bread flour, 20 ww flour, 80 water, 2.5 salt,
+								.33 yeast..."</span
+							>
+						</span>
+						<span class="topic-idea" onclick="delegator();">
+							<p>
+								Bread baker's friend recognizes most metric and imperial units,
+								which can be mixed in the same recipe. It recognizes integers,
+								decimals, fractions, and mixed numbers.
+							</p>
+						</span>
+						<span class="topic-example" onclick="delegator();">
+							<span class="recipe-string" onclick="delegator();"
+								>"20 oz bread flour, 2 2/3 oz ww flour, 1.5# water, 6.5 oz milk,
+								1/2 lb sugar, 22g salt, 7g yeast..."</span
+							>
+						</span>
+						<div class="end-symbol"><br />* * *</div>
+					</div>
+					<div class="quickstart-main-help-link">
+						<p>
+							Check out the <span class="faq-link">faq/docs</span> here, or
+							click the help icon in the upper left corner of the welcome page
+							for more information.
+						</p>
+					</div>
+				</div>
+			</div>
+			<!-- welcome-text -->
+			<div class="welcome-text-container" onclick="delegator();">
+				<h1><span onclick="delegator();">baker's math,</span> simplified.</h1>
+				<p>
+					Convert any weight-based recipe <br />to a dynamic, formula-based
+					table.
+				</p>
+				<p></p>
+				<p class="quickstart-link">
+					Questions? Here's a <span>Quickstart Guide</span>!
+				</p>
+			</div>
+			<!-- user-input -->
+			<div class="user-input-container" onclick="delegator();">
+				<div class="input-box" onclick="delegator();">
+					<label onclick="delegator();">Enter your recipe:</label>
+					<div
+						class="input-warning"
+						id="main-recipe-warning"
+						onclick="delegator();"
+					></div>
+					<div
+						class="recipe-textarea"
+						id="main-recipe-textarea"
+						contenteditable="true"
+						onclick="delegator();"
+					></div>
+					<p>Example: "200g flour, 150g water, ..."</p>
+					<div
+						class="oversize-button main-parse-recipe-button"
+						id="main-parse-recipe-button"
+						data-click-history=""
+						onclick="delegator();"
+					>
+						Do The Math
+					</div>
+					<div
+						class="oversize-button"
+						id="main-load-recipe-button"
+						onclick="delegator();"
+					>
+						Load A Recipe
+					</div>
+				</div>
+			</div>
+			<!-- main table-container -->
+			<div class="table-wrapper hidden" onclick="delegator();">
+				<!-- main table -->
+				<div class="table-container" onclick="delegator();">
+					<div
+						class="recipe container"
+						id="recipe-name-container"
+						onclick="delegator();"
+					>
+						<div class="recipe-name" onclick="delegator();">(my recipe)</div>
+					</div>
+					<div
+						class="totals container"
+						id="totals-container"
+						onclick="delegator();"
+					>
+						<div class="totals row" id="tdw-row" onclick="delegator();">
+							<div class="tdw-text" id="tdw-text" onclick="delegator();">
+								total dough weight (g):
+							</div>
+							<div class="tdw-val" id="tdw-val" onclick="delegator();"></div>
+						</div>
+						<div class="totals row" id="tf-row" onclick="delegator();">
+							<div class="tf-text" id="tf-text" onclick="delegator();">
+								total formula %:
+							</div>
+							<div class="tf-val" id="tf-val" onclick="delegator();"></div>
+						</div>
+					</div>
+					<!-- items gets inserted here if mobile view, else standalone // for now, it's always here... -->
+					<div
+						class="items container hidden"
+						id="items-container"
+						onclick="delegator();"
+					>
+						<div
+							class="items header row"
+							id="items-header-row"
+							onclick="delegator();"
+						>
+							<div
+								class="remove-item-button header"
+								id="items-header-remove-item-button"
+								onclick="delegator();"
+							></div>
+							<div
+								class="cell header items-name"
+								id="items-header-items-name"
+								onclick="delegator();"
+							>
+								item name
+							</div>
+							<div
+								class="cell header items-weight"
+								id="items-header-items-weight"
+								onclick="delegator();"
+							>
+								weight
+							</div>
+							<div
+								class="cell header items-amount"
+								id="items-header-items-amount"
+								onclick="delegator();"
+							>
+								amount
+							</div>
+						</div>
 
-                <!-- quickstart video synopsis here -->
-                <span class="topic-button" onclick="delegator();">
-                    <span class="topic-button-text" onclick="delegator();">A brief introductory video of Bread Baker's Friend in action</span>
-                    <span class="topic-button-caret material-icons" onclick="delegator();">keyboard_arrow_right</span>
-                </span>
-                <div class="topic-content" onclick="delegator();">
-                    <div class="vid-container" onclick="delegator();">
-                        <video class="help-video" controls>
-                            <source src="/breadbakersfriend_videos/quickstart-overview.webm" type="video/webm">
-                        </video>
-                    </div>
-                    <div class="end-symbol"><br>* * *</div>
-                </div>
-                <span class="topic-button" onclick="delegator();">
-                    <span class="topic-button-text" onclick="delegator();">New to baker's math? Here's an overview!</span>
-                    <span class="topic-button-caret material-icons" onclick="delegator();">keyboard_arrow_right</span>
-                </span>
-                <div class="topic-content" onclick="delegator();">
-                    <span class="topic-idea" onclick="delegator();">
-                        <p><strong>Baker's math</strong> relates ingredients to a main weight. Usually, this main weight is a combination of flour weights, but it can be an arbitrary main ingredient, too.</p>
-                    </span>
-                    <span class="topic-example" onclick="delegator();">
-                        <div class="topic_ingredient-line" onclick="delegator();"><span onclick="delegator();">100</span><span>g</span><span>ap flour</span></div>
-                        <div class="topic_ingredient-line" onclick="delegator();"><span onclick="delegator();">50</span><span>g</span><span>bread flour</span></div>
-                        <div class="topic_ingredient-line" onclick="delegator();"><span onclick="delegator();">30</span><span>g</span><span>spelt flour</span></div>
-                        <div class="topic_ingredient-line" onclick="delegator();"><span onclick="delegator();">20</span><span>g</span><span>rye flour</span></div>
-                        <div class="topic_ingredient-line" onclick="delegator();"><span onclick="delegator();">150</span><span>g</span><span>water</span></div>
-                        <div class="topic_ingredient-line" onclick="delegator();"><span onclick="delegator();">30</span><span>g</span><span>levain</span></div>
-                        <div class="topic_ingredient-line" onclick="delegator();"><span onclick="delegator();">5</span><span>g</span><span>salt</span></div>
-                        <p><strong>Total main weight,</strong> in this case the sum of all "flour" ingredients, is 200g. Each ingredient is divided by this amount to yield a baker's percentage for that ingredient.</p>
-                        <div class="example-container" onclick="delegator();">100g ap flour ÷ 200g total flour = <br>50% ap flour</div>
-                    </span>
-                    <span class="topic-idea" onclick="delegator();">
-                        <p>Our example recipe yields the following baker's percentages:</p>
-                    </span>
-                    <span class="topic-example" onclick="delegator();">
-                        <div class="topic_ingredient-line total-main-ingredient" onclick="delegator();"><span onclick="delegator();">100</span><span>%</span><span>total flour</span></div>
-                        <div class="topic_ingredient-line" onclick="delegator();"><span onclick="delegator();">50</span><span>%</span><span>ap flour</span></div>
-                        <div class="topic_ingredient-line" onclick="delegator();"><span onclick="delegator();">25</span><span>%</span><span>bread flour</span></div>
-                        <div class="topic_ingredient-line" onclick="delegator();"><span onclick="delegator();">15</span><span>%</span><span>spelt flour</span></div>
-                        <div class="topic_ingredient-line" onclick="delegator();"><span onclick="delegator();">10</span><span>%</span><span>rye flour</span></div>
-                        <div class="topic_ingredient-line" onclick="delegator();"><span onclick="delegator();">75</span><span>%</span><span>water</span></div>
-                        <div class="topic_ingredient-line" onclick="delegator();"><span onclick="delegator();">15</span><span>%</span><span>levain</span></div>
-                        <div class="topic_ingredient-line" onclick="delegator();"><span onclick="delegator();">2.5</span><span>%</span><span>salt</span></div>
-                    </span>
-                    <span class="topic-idea" onclick="delegator();">
-                        <p>These individual baker's percentages can then be used to scale any total dough weight for each individual ingredient, guaranteeing consistency of the recipe -- no matter the quantity.</p>
-                    </span>
-                    <span class="topic example" onclick="delegator();">
-                        <div class="example-container" onclick="delegator();">Scaled Weight Formula:<br>Individual Baker's Percentage<br>    ÷ Total Formula<br>     * Total Dough Weight =<br>Individual Scaled Weight</div>
-                    </span>
-                    <span class="topic-idea" onclick="delegator();">
-                        <p>The <strong>total formula</strong> is the sum of all ingredient baker's percentages. If the <strong>total main weight</strong> is a sum of main ingredients, it is omitted; otherwise, it's counted!</p>
-                    </span>
-                    <span class="topic example" onclick="delegator();">
-                        <div class="example-container" onclick="delegator();">50 + 25 + 15 + 10 + 75 + 15 + 2.5 =<br>192.5%</div>
-                    </span>
-                    <span class="topic-idea" onclick="delegator();">
-                        <p>Let's scale our example recipe using a <strong>total dough weight</strong> equal to a 680g tin loaf (approximately 1.5 lbs), and the previously calculated <strong>total formula,</strong> 192.5%:</p>
-                    </span>
-                    <span class="topic-example" onclick="delegator();">
-                        <div class="topic_ingredient-line header" onclick="delegator();"><span onclick="delegator();">ingredient</span><span>bp (%)</span><span>weight (g)</span></div>
-                        <div class="topic_ingredient-line total-main-ingredient" onclick="delegator();"><span onclick="delegator();">total flour</span><span>100</span><span>353</span></div>
-                        <div class="topic_ingredient-line" onclick="delegator();"><span onclick="delegator();">ap flour</span><span>50</span><span>176.6</span></div>
-                        <div class="topic_ingredient-line" onclick="delegator();"><span onclick="delegator();">bread flour</span><span>25</span><span>88.3</span></div>
-                        <div class="topic_ingredient-line" onclick="delegator();"><span onclick="delegator();">spelt flour</span><span>15</span><span>53</span></div>
-                        <div class="topic_ingredient-line" onclick="delegator();"><span onclick="delegator();">rye flour</span><span>10</span><span>35.3</span></div>
-                        <div class="topic_ingredient-line" onclick="delegator();"><span onclick="delegator();">water</span><span>75</span><span>265</span></div>
-                        <div class="topic_ingredient-line" onclick="delegator();"><span onclick="delegator();">levain</span><span>15</span><span>53</span></div>
-                        <div class="topic_ingredient-line" onclick="delegator();"><span onclick="delegator();">salt</span><span>2.5</span><span>8.8</span></div>
-                    </span>
-                    <div class="end-symbol"><br>* * *</div>
-                </div>
-                <span class="topic-button" onclick="delegator();">
-                    <span class="topic-button-text" onclick="delegator();">How does Bread Baker's Friend determine which ingredient(s) are used to calculate the total main weight?</span>
-                    <span class="topic-button-caret material-icons" onclick="delegator();">keyboard_arrow_right</span>
-                </span>
-                <div class="topic-content" onclick="delegator();">
-                    <span class="topic-idea" onclick="delegator();">
-                        <p>Bread Baker's Friend sums all flour ingredients automatically. Alternatively, you can designate a main ingredient with an asterisk.</p><p>Given the following recipe,</p>
-                    </span>
-                    <span class="topic-example" onclick="delegator();">
-                        <div class="topic_ingredient-line" onclick="delegator();"><span onclick="delegator();">300</span><span>g</span><span>*9-grain<br>seed mix</span></div>
-                        <div class="topic_ingredient-line" onclick="delegator();"><span onclick="delegator();">420</span><span>g</span><span>water</span></div>
-                        <div class="topic_ingredient-line" onclick="delegator();"><span onclick="delegator();">90</span><span>g</span><span>ww flour</span></div>
-                        <div class="topic_ingredient-line" onclick="delegator();"><span onclick="delegator();">30</span><span>g</span><span>rye flour</span></div>
-                    </span>
-                    <span class="topic-idea" onclick="delegator();">
-                        <p><strong>*9-grain seed mix</strong> will be set to 100%, yielding the following baker's percentages:</p>
-                    </span>
-                    <span class="topic-example" onclick="delegator();">
-                        <div class="topic_ingredient-line" onclick="delegator();"><span onclick="delegator();">100</span><span>%</span><span>*9-grain<br>seed mix</span></div>
-                        <div class="topic_ingredient-line" onclick="delegator();"><span onclick="delegator();">140</span><span>%</span><span>water</span></div>
-                        <div class="topic_ingredient-line" onclick="delegator();"><span onclick="delegator();">30</span><span>%</span><span>ww flour</span></div>
-                        <div class="topic_ingredient-line" onclick="delegator();"><span onclick="delegator();">10</span><span>%</span><span>rye flour</span></div>
-                    </span>
-                    <span class="topic-idea" onclick="delegator();">
-                        <p>Without the asterisk, ww + rye flours will be set to 100%, yielding different, sillier baker's percentages.</p>
-                    </span>
-                    <span class="topic-example" onclick="delegator();">
-                        <div class="topic_ingredient-line total-main-ingredient" onclick="delegator();"><span onclick="delegator();">100</span><span>%</span><span>total flour</span></div>
-                        <div class="topic_ingredient-line" onclick="delegator();"><span onclick="delegator();">250</span><span>%</span><span>9-grain<br>seed mix</span></div>
-                        <div class="topic_ingredient-line" onclick="delegator();"><span onclick="delegator();">350</span><span>%</span><span>water</span></div>
-                        <div class="topic_ingredient-line" onclick="delegator();"><span onclick="delegator();">75</span><span>%</span><span>ww flour</span></div>
-                        <div class="topic_ingredient-line" onclick="delegator();"><span onclick="delegator();">25</span><span>%</span><span>rye flour</span></div>
-                    </span>
-                    <span class="topic-idea" onclick="delegator();">
-                        <p>Asterisks take precedence over flour ingredients in determining which ingredient(s) make up the <strong>total main ingredient</strong>.</p>
-                    </span>
-                    <div class="end-symbol">* * *</div>
-                </div>
-                <span class="topic-button" onclick="delegator();">
-                    <span class="topic-button-text" onclick="delegator();">How do I format my recipe?</span>
-                    <span class="topic-button-caret material-icons" onclick="delegator();">keyboard_arrow_right</span>
-                </span>
-                <div class="topic-content" onclick="delegator();">
-                    <div class="example-container" style="margin-top: 2em;" onclick="delegator();">
-                        <p><strong>[ Number, unit, ingredient name... ]</strong></p>
-                    </div>
-                    <span class="topic-idea" onclick="delegator();">
-                        <p>Recipes begin with a number, followed by an optional unit, and an ingredient name. Bread Baker's friend doesn't require commas or other delimiting punctuation. Equal spacing is safest! Any number that's not directly beside a unit will be treated as part of an ingredient name.</p>
-                    </span>
-                    <span class="topic-example" onclick="delegator();">
-                        <span class="recipe-string" onclick="delegator();">"100g flour, 60g water, 20g whole milk (vitamin D added), 15g egg yolk, 10g 0.25-inch pearl sugar..."</span>
-                    </span>
-                    <span class="topic-idea" onclick="delegator();">
-                        <p>You may also choose to enter a recipe <strong>without</strong> units, provided that units are left off every ingredient. These <strong>uniform</strong> recipes can be a predetermined set of baker's math or a group of ingredients that would share the same unit.</p>
-                    </span>
-                    <span class="topic-example" onclick="delegator();">
-                        <span class="recipe-string" onclick="delegator();">"50 ap flour, 30 bread flour, 20 ww flour, 80 water, 2.5 salt, .33 yeast..."</span>
-                    </span>
-                    <span class="topic-idea" onclick="delegator();">
-                        <p>Bread baker's friend recognizes most metric and imperial units, which can be mixed in the same recipe. It recognizes integers, decimals, fractions, and mixed numbers.</p>
-                    </span>
-                    <span class="topic-example" onclick="delegator();">
-                        <span class="recipe-string" onclick="delegator();">"20 oz bread flour, 2 2/3 oz ww flour, 1.5# water, 6.5 oz milk, 1/2 lb sugar, 22g salt, 7g yeast..."</span>
-                    </span>
-                    <div class="end-symbol"><br>* * *</div>
-                </div>
-                <div class="quickstart-main-help-link"><p>Check out the <span class="faq-link">faq/docs</span> here, or click the help icon in the upper left corner of the welcome page for more information.</p></div>
-            </div>
-        </div>
-        <!-- welcome-text -->
-        <div class="welcome-text-container" onclick="delegator();">
-            <h1><span onclick="delegator();">baker's math,</span> simplified.</h1>
-            <p>Convert any weight-based recipe <br>to a dynamic, formula-based table.</p>
-            <p></p>
-            <p class="quickstart-link">Questions? Here's a <span>Quickstart Guide</span>!</p>
-        </div>
-        <!-- user-input -->
-        <div class="user-input-container" onclick="delegator();">
-            <div class="input-box" onclick="delegator();">
-                <label onclick="delegator();">Enter your recipe:</label>
-                <div class="input-warning" id="main-recipe-warning" onclick="delegator();"></div>
-                <div class="recipe-textarea" id="main-recipe-textarea" contenteditable="true" onclick="delegator();"></div>
-                <p>Example: "200g flour, 150g water, ..."</p>
-                <div class="oversize-button main-parse-recipe-button" id="main-parse-recipe-button" data-click-history="" onclick="delegator();">Do The Math</div>
-                <div class="oversize-button" id="main-load-recipe-button" onclick="delegator();">Load A Recipe</div>
-            </div>
-        </div>
-        <!-- main table-container -->
-        <div class="table-wrapper hidden" onclick="delegator();">
-            <!-- main table -->
-            <div class="table-container" onclick="delegator();">
-                <div class="recipe container" id="recipe-name-container" onclick="delegator();">
-                    <div class="recipe-name" onclick="delegator();">(my recipe)</div>
-                </div>
-                <div class="totals container" id="totals-container" onclick="delegator();">
-                    <div class="totals row" id="tdw-row" onclick="delegator();">
-                        <div class="tdw-text" id="tdw-text" onclick="delegator();">total dough weight (g): </div>
-                        <div class="tdw-val" id="tdw-val" onclick="delegator();"></div>
-                    </div>
-                    <div class="totals row" id="tf-row" onclick="delegator();">
-                        <div class="tf-text" id="tf-text" onclick="delegator();">total formula %:</div>
-                        <div class="tf-val" id="tf-val" onclick="delegator();"></div>
-                    </div>
-                </div>
-                <!-- items gets inserted here if mobile view, else standalone // for now, it's always here... -->
-                <div class="items container hidden" id="items-container" onclick="delegator();">
+						<!-- item rows get inserted here -->
+						<div
+							class="items-body"
+							id="items-body"
+							onclick="delegator();"
+						></div>
+					</div>
+					<div
+						class="ingredients container"
+						id="ingredients-container"
+						onclick="delegator();"
+					>
+						<div
+							class="ingredients header row"
+							id="ingredients-header-row"
+							onclick="delegator();"
+						>
+							<div
+								class="arrowbox header"
+								id="ingredients-header-arrowbox"
+								onclick="delegator();"
+							></div>
+							<div
+								class="cell header ing-name"
+								id="ingredients-header-ing-name"
+								onclick="delegator();"
+							>
+								ingredient
+							</div>
+							<div
+								class="cell header ing-bp"
+								id="ingredients-header-ing-bp"
+								onclick="delegator();"
+							>
+								baker's %
+							</div>
+							<div
+								class="cell header ing-sw"
+								id="ingredients-header-ing-sw"
+								onclick="delegator();"
+							>
+								weight (g)
+							</div>
+						</div>
+						<!-- ingredient rows get inserted here -->
+						<div
+							class="ingredients-body"
+							id="main-ingredients-body"
+							onclick="delegator();"
+						></div>
+					</div>
+					<div
+						class="method container"
+						id="method-container"
+						onclick="delegator();"
+					>
+						(method goes here)
+					</div>
+				</div>
+				<!-- hidden items container former spot-->
+				<!-- hidden items row template -->
+				<div
+					class="items row hidden template"
+					id="items-row-template"
+					onclick="delegator();"
+				>
+					<span
+						class="remove-items-button material-icons"
+						onclick="delegator();"
+						>close</span
+					>
+					<div
+						class="cell items-name template"
+						contenteditable="true"
+						onclick="delegator();"
+					></div>
+					<div
+						class="cell items-weight template"
+						contenteditable="true"
+						onclick="delegator();"
+					></div>
+					<div
+						class="cell items-amount template"
+						contenteditable="true"
+						onclick="delegator();"
+					></div>
+				</div>
+				<!-- hidden ingredients row template -->
+				<div
+					class="ingredients row hidden template"
+					id="ingredients-row-template"
+					onclick="delegator();"
+				>
+					<div class="arrowbox template" onclick="delegator();"></div>
+					<div class="cell ing-name template" onclick="delegator();"></div>
+					<div class="cell ing-bp template" onclick="delegator();"></div>
+					<div class="cell ing-sw template" onclick="delegator();"></div>
+				</div>
+				<!-- hidden subr table-container template -->
+				<div
+					class="subr wrapper template"
+					id="subr-wrapper-template"
+					onclick="delegator();"
+				>
+					<!-- subr user-input-container template -->
+					<div class="subr user-input-container" onclick="delegator();">
+						<div class="subr input-box" onclick="delegator();">
+							<label onclick="delegator();">Enter your subrecipe:</label>
+							<div
+								class="input-warning"
+								id="subr-recipe-warning-"
+								onclick="delegator();"
+							></div>
+							<div
+								class="recipe-textarea"
+								id="subr-recipe-textarea-"
+								contenteditable="true"
+								onclick="delegator();"
+							></div>
+							<p>Example: "200g flour, 150g water, ..."</p>
+							<div
+								class="oversize-button subr-parse-recipe-button"
+								id="subr-parse-recipe-button-"
+								onclick="delegator();"
+							>
+								Do The Math
+							</div>
+						</div>
+					</div>
+					<!-- subr table-wrapper -->
+					<div class="subr table-container" onclick="delegator();">
+						<div
+							class="subr recipe container"
+							id="subr-recipe-name-container-"
+							onclick="delegator();"
+						>
+							<span
+								class="remove-subrecipe-button material-icons"
+								id="remove-subrecipe-button-"
+								onclick="delegator();"
+								>cancel</span
+							>
+							<div class="subr recipe-name" onclick="delegator();"></div>
+						</div>
+						<div
+							class="subr totals container"
+							id="subr-totals-container-"
+							onclick="delegator();"
+						>
+							<div
+								class="subr totals row"
+								id="subr-tdw-row"
+								onclick="delegator();"
+							>
+								<div
+									class="subr tdw-text"
+									id="subr-tdw-text-"
+									onclick="delegator();"
+								>
+									total dough weight (g):
+								</div>
+								<div
+									class="subr tdw-val"
+									id="subr-tdw-val-"
+									onclick="delegator();"
+								></div>
+							</div>
+							<div
+								class="subr totals row"
+								id="subr-tf-row"
+								onclick="delegator();"
+							>
+								<div
+									class="subr tf-text"
+									id="subr-tf-text-"
+									onclick="delegator();"
+								>
+									total formula %:
+								</div>
+								<div
+									class="subr tf-val"
+									id="subr-tf-val-"
+									onclick="delegator();"
+								></div>
+							</div>
+						</div>
 
-                    <div class="items header row" id="items-header-row" onclick="delegator();">
-                        <div class="remove-item-button header" id="items-header-remove-item-button" onclick="delegator();"></div>
-                        <div class="cell header items-name" id="items-header-items-name" onclick="delegator();">item name</div>
-                        <div class="cell header items-weight" id="items-header-items-weight" onclick="delegator();">weight</div>
-                        <div class="cell header items-amount" id="items-header-items-amount" onclick="delegator();">amount</div>
-                    </div>
+						<div
+							class="subr ingredients container"
+							id="subr-ingredients-container-"
+							onclick="delegator();"
+						>
+							<div
+								class="subr ingredients header row"
+								id="subr-ingredients-header-row-"
+								onclick="delegator();"
+							>
+								<div
+									class="subr cell header ing-name"
+									id="subr-ingredients-header-ing-name"
+									onclick="delegator();"
+								>
+									ingredient
+								</div>
+								<div
+									class="subr cell header ing-bp"
+									id="subr-ingredients-header-ing-bp"
+									onclick="delegator();"
+								>
+									baker's %
+								</div>
+								<div
+									class="subr cell header ing-sw"
+									id="subr-ingredients-header-ing-sw"
+									onclick="delegator();"
+								>
+									weight (g)
+								</div>
+							</div>
+							<!-- subr ingredient rows get inserted here -->
+							<div
+								class="subr ingredients-body"
+								id="subr-ingredients-body-"
+								onclick="delegator();"
+							></div>
+						</div>
+					</div>
+					<!-- subr ingredients row template -->
+					<div
+						class="subr ingredients row"
+						id="subr-ingredients-row-template"
+						onclick="delegator();"
+					>
+						<div
+							class="cell subr ing-name template"
+							onclick="delegator();"
+						></div>
+						<div class="cell subr ing-bp template" onclick="delegator();"></div>
+						<div class="cell subr ing-sw template" onclick="delegator();"></div>
+					</div>
+				</div>
+			</div>
+			<!-- toolbar-container -->
+			<div class="toolbar-container hidden" onclick="delegator();">
+				<!-- toolbar -->
+				<div class="toolbar-runner">
+					<div class="toolbar" id="toolbar" onclick="delegator();">
+						<div class="toolbar__link" id="undo-toolbar-button">
+							<i
+								class="material-icons toolbar__icon"
+								id="undo-toolbar-icon"
+								onclick="delegator();"
+								>undo</i
+							>
+							<span
+								class="toolbar__text"
+								id="undo-toolbar-text"
+								onclick="delegator();"
+								>Undo</span
+							>
+						</div>
+						<div class="toolbar__link" id="redo-toolbar-button">
+							<i
+								class="material-icons toolbar__icon"
+								id="redo-toolbar-icon"
+								onclick="delegator();"
+								>redo</i
+							>
+							<span
+								class="toolbar__text"
+								id="redo-toolbar-text"
+								onclick="delegator();"
+								>Redo</span
+							>
+						</div>
+						<div class="toolbar__link" id="add-items-button">
+							<i
+								class="material-icons toolbar__icon"
+								id="add-items-toolbar-icon"
+								onclick="delegator();"
+								>add</i
+							>
+							<span
+								class="toolbar__text"
+								id="add-items-toolbar-text"
+								onclick="delegator();"
+								>Add Item</span
+							>
+						</div>
+						<div class="toolbar__link" id="load-toolbar-button">
+							<i
+								class="material-icons toolbar__icon"
+								id="load-toolbar-icon"
+								onclick="delegator();"
+								>publish</i
+							>
+							<span
+								class="toolbar__text"
+								id="load-toolbar-text"
+								onclick="delegator();"
+								>Load</span
+							>
+						</div>
+						<div class="toolbar__link" id="save-toolbar-button">
+							<i
+								class="material-icons toolbar__icon"
+								class="save-recipe-button"
+								id="save-toolbar-icon"
+								onclick="delegator();"
+								>save_alt</i
+							>
+							<span
+								class="toolbar__text"
+								id="save-toolbar-text"
+								onclick="delegator();"
+								>Save</span
+							>
+						</div>
+					</div>
+				</div>
 
-                    <!-- item rows get inserted here -->
-                    <div class="items-body" id="items-body" onclick="delegator();"></div>
-                </div>
-                <div class="ingredients container" id="ingredients-container" onclick="delegator();">
-
-                    <div class="ingredients header row" id="ingredients-header-row" onclick="delegator();">
-                        <div class="arrowbox header" id="ingredients-header-arrowbox" onclick="delegator();"></div>
-                        <div class="cell header ing-name" id="ingredients-header-ing-name" onclick="delegator();">ingredient</div>
-                        <div class="cell header ing-bp" id="ingredients-header-ing-bp" onclick="delegator();">baker's %</div>
-                        <div class="cell header ing-sw" id="ingredients-header-ing-sw" onclick="delegator();">weight (g)</div>
-                    </div>
-                    <!-- ingredient rows get inserted here -->
-                    <div class="ingredients-body" id="main-ingredients-body" onclick="delegator();"></div>
-                </div>
-                <div class="method container" id="method-container" onclick="delegator();">(method goes here)</div>
-            </div>
-            <!-- hidden items container former spot-->
-            <!-- hidden items row template -->
-            <div class="items row hidden template" id="items-row-template"  onclick="delegator();">
-                    <span class="remove-items-button material-icons" onclick="delegator();">close</span>
-                    <div class="cell items-name template" contenteditable="true" onclick="delegator();"></div>
-                    <div class="cell items-weight template" contenteditable="true" onclick="delegator();"></div>
-                    <div class="cell items-amount template" contenteditable="true" onclick="delegator();"></div>
-
-            </div>
-            <!-- hidden ingredients row template -->
-            <div class="ingredients row hidden template" id="ingredients-row-template"  onclick="delegator();">
-                <div class="arrowbox template" onclick="delegator();"></div>
-                <div class="cell ing-name template" onclick="delegator();"></div>
-                <div class="cell ing-bp template" onclick="delegator();"></div>
-                <div class="cell ing-sw template" onclick="delegator();"></div>
-            </div>
-            <!-- hidden subr table-container template -->
-            <div class="subr wrapper template" id="subr-wrapper-template"  onclick="delegator();">
-                <!-- subr user-input-container template -->
-                <div class="subr user-input-container" onclick="delegator();">
-                    <div class="subr input-box" onclick="delegator();">
-                        <label onclick="delegator();">Enter your subrecipe:</label>
-                        <div class="input-warning" id="subr-recipe-warning-" onclick="delegator();"></div>
-                        <div class="recipe-textarea" id="subr-recipe-textarea-" contenteditable="true" onclick="delegator();"></div>
-                        <p>Example: "200g flour, 150g water, ..."</p>
-                        <div class="oversize-button subr-parse-recipe-button" id="subr-parse-recipe-button-" onclick="delegator();">Do The Math</div>
-                    </div>
-                </div>
-                <!-- subr table-wrapper -->
-                <div class="subr table-container" onclick="delegator();">
-                    <div class="subr recipe container" id="subr-recipe-name-container-" onclick="delegator();">
-                        <span class="remove-subrecipe-button material-icons" id="remove-subrecipe-button-" onclick="delegator();">cancel</span>
-                        <div class="subr recipe-name" onclick="delegator();"></div>
-                    </div>
-                    <div class="subr totals container" id="subr-totals-container-" onclick="delegator();">
-                        <div class="subr totals row" id="subr-tdw-row" onclick="delegator();">
-                            <div class="subr tdw-text" id="subr-tdw-text-" onclick="delegator();">total dough weight (g): </div>
-                            <div class="subr tdw-val" id="subr-tdw-val-" onclick="delegator();"></div>
-                        </div>
-                        <div class="subr totals row" id="subr-tf-row" onclick="delegator();">
-                            <div class="subr tf-text" id="subr-tf-text-" onclick="delegator();">total formula %:</div>
-                            <div class="subr tf-val" id="subr-tf-val-" onclick="delegator();"></div>
-                        </div>
-                    </div>
-
-                    <div class="subr ingredients container" id="subr-ingredients-container-" onclick="delegator();">
-
-                        <div class="subr ingredients header row" id="subr-ingredients-header-row-" onclick="delegator();">
-                            <div class="subr cell header ing-name" id="subr-ingredients-header-ing-name" onclick="delegator();">ingredient</div>
-                            <div class="subr cell header ing-bp" id="subr-ingredients-header-ing-bp" onclick="delegator();">baker's %</div>
-                            <div class="subr cell header ing-sw" id="subr-ingredients-header-ing-sw" onclick="delegator();">weight (g)</div>
-                        </div>
-                        <!-- subr ingredient rows get inserted here -->
-                        <div class="subr ingredients-body" id="subr-ingredients-body-" onclick="delegator();"></div>
-                    </div>
-                </div>
-                <!-- subr ingredients row template -->
-                <div class="subr ingredients row" id="subr-ingredients-row-template" onclick="delegator();">
-                    <div class="cell subr ing-name template" onclick="delegator();"></div>
-                    <div class="cell subr ing-bp template" onclick="delegator();"></div>
-                    <div class="cell subr ing-sw template" onclick="delegator();"></div>
-                </div>
-            </div>
-        </div>
-        <!-- toolbar-container -->
-        <div class="toolbar-container hidden" onclick="delegator();">
-            <!-- toolbar -->
-            <div class="toolbar" id="toolbar" onclick="delegator();">
-                <div class="toolbar__link" id="undo-toolbar-button">
-                    <i class="material-icons toolbar__icon" id="undo-toolbar-icon" onclick="delegator();">undo</i>
-                    <span class="toolbar__text" id="undo-toolbar-text" onclick="delegator();">Undo</span>
-                </div>
-                <div class="toolbar__link" id="redo-toolbar-button">
-                    <i class="material-icons toolbar__icon" id="redo-toolbar-icon" onclick="delegator();">redo</i>
-                    <span class="toolbar__text" id="redo-toolbar-text" onclick="delegator();">Redo</span>
-                </div>
-                <div class="toolbar__link" id="add-items-button">
-                    <i class="material-icons toolbar__icon" id="add-items-toolbar-icon" onclick="delegator();">add</i>
-                    <span class="toolbar__text" id="add-items-toolbar-text" onclick="delegator();">Add Item</span>
-                </div>
-                <div class="toolbar__link" id="load-toolbar-button">
-                    <i class="material-icons toolbar__icon" id="load-toolbar-icon" onclick="delegator();">publish</i>
-                    <span class="toolbar__text" id="load-toolbar-text" onclick="delegator();">Load</span>
-                </div>
-                <div class="toolbar__link" id="save-toolbar-button">
-                    <i class="material-icons toolbar__icon" class="save-recipe-button" id="save-toolbar-icon" onclick="delegator();">save_alt</i>
-                    <span class="toolbar__text" id="save-toolbar-text" onclick="delegator();">Save</span>
-                </div>
-            </div>
-
-            <!-- save-drop-menu -->
-            <div class="drop-menu" id="save-drop-menu" onclick="delegator();">
-                <div class="save-recipe-button" id="ios-user-save-message" onclick="delegator();">
-                    <div onclick="delegator();">File Saving For iOS Users</div>
-                    <div class="drop-menu-caret material-icons" onclick="delegator();">keyboard_arrow_right</div>
-                </div>
-                <div class="save-recipe-button" id="save-spreadsheet" onclick="delegator();">
-                    <div onclick="delegator();">Spreadsheet</div>
-                    <div class="drop-menu-caret material-icons" onclick="delegator();">keyboard_arrow_right</div>
-                </div>
-                <div class="save-recipe-button" id="save-csv" onclick="delegator();">
-                    <div onclick="delegator();">Plain CSV</div>
-                    <div class="drop-menu-caret material-icons" onclick="delegator();">keyboard_arrow_right</div>
-                </div>
-                <div class="save-recipe-button" id="save-json" onclick="delegator();">
-                    <div onclick="delegator();">BBF-Loadable File</div>
-                    <div class="drop-menu-caret material-icons" onclick="delegator();">keyboard_arrow_right</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-</body>
+				<!-- save-drop-menu -->
+				<div class="drop-menu" id="save-drop-menu" onclick="delegator();">
+					<div
+						class="save-recipe-button"
+						id="ios-user-save-message"
+						onclick="delegator();"
+					>
+						<div onclick="delegator();">File Saving For iOS Users</div>
+						<div class="drop-menu-caret material-icons" onclick="delegator();">
+							keyboard_arrow_right
+						</div>
+					</div>
+					<div
+						class="save-recipe-button"
+						id="save-spreadsheet"
+						onclick="delegator();"
+					>
+						<div onclick="delegator();">Spreadsheet</div>
+						<div class="drop-menu-caret material-icons" onclick="delegator();">
+							keyboard_arrow_right
+						</div>
+					</div>
+					<div class="save-recipe-button" id="save-csv" onclick="delegator();">
+						<div onclick="delegator();">Plain CSV</div>
+						<div class="drop-menu-caret material-icons" onclick="delegator();">
+							keyboard_arrow_right
+						</div>
+					</div>
+					<div class="save-recipe-button" id="save-json" onclick="delegator();">
+						<div onclick="delegator();">BBF-Loadable File</div>
+						<div class="drop-menu-caret material-icons" onclick="delegator();">
+							keyboard_arrow_right
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
 </html>
