@@ -851,15 +851,26 @@ body {
 
 .drop-menu {
 	display: none;
-	position: fixed;
+	position: absolute;
 	height: auto;
-	width: 100%;
-	bottom: 4em;
+	width: 100vw;
+	max-width: 582px;
+	bottom: -357px;
+	left: calc(50% - 18.2em);
 	z-index: 1;
 	background-color: var(--toolbar_background);
 	color: var(--textcolor);
 	transition: 0.1s;
 	overflow-x: hidden;
+}
+
+@media (max-width: 582px) {
+	.drop-menu {
+		max-width: none;
+		position: fixed;
+		bottom: 4em;
+		left: 0;
+	}
 }
 
 #ios-user-save-message {
