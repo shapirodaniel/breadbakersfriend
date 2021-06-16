@@ -855,8 +855,8 @@ body {
 	height: auto;
 	width: 100vw;
 	max-width: 582px;
-	bottom: -357px;
-	left: calc(50% - 18.2em);
+	bottom: -433px;
+	left: calc(50% - 18.15em);
 	z-index: 1;
 	background-color: var(--toolbar_background);
 	color: var(--textcolor);
